@@ -27,13 +27,13 @@ stages{
             parallel{
                 stage ('Deploy to Staging'){
                     steps {
-                        bat "copy **\\target\\*.war C:\\Tomcat_8.0\\webapps"
+                        bat "copy C:\\OwnProgramFiles\\Jenkins_Temp\\workspace\\package\\webapp\\target\\*.war C:\\Tomcat_8.0\\webapps"
                     }
                 }
 
                 stage ("Deploy to Production"){
                     steps {
-						bat "copy **\\arget\\*.war C:\\Tomcat_8.0-Production\\webapps"
+						bat "copy C:\\OwnProgramFiles\\Jenkins_Temp\\workspace\\package\\webapp\\target\\*.war C:\\Tomcat_8.0-Production\\webapps"
                     }
                 }
             }
