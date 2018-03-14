@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     parameters {
-         string(name: 'tomcat_staging', defaultValue: 'C:\\Tomcat_8.0\\webapps', description: 'Staging Server')
-         string(name: 'tomcat_prod', defaultValue: 'C:\\Tomcat_8.0-Production\\webapps', description: 'Production Server')
+         string(name: 'tomcat_staging', defaultValue: 'C://Tomcat_8.0/webapps', description: 'Staging Server')
+         string(name: 'tomcat_prod', defaultValue: 'C://Tomcat_8.0-Production//webapps', description: 'Production Server')
     }
 
     triggers {
@@ -18,7 +18,7 @@ stages{
             post {
                 success {
                     echo 'Now Archiving...'
-                    archiveArtifacts artifacts: '**\\target\\*.war'
+                    archiveArtifacts artifacts: '**//target//*.war'
                 }
             }
         }
@@ -27,13 +27,13 @@ stages{
             parallel{
                 stage ('Deploy to Staging'){
                     steps {
-                        bat "copy **\\target\\*.war ${params.tomcat_staging}"
+                        bat "copy **//target//*.war ${params.tomcat_staging}"
                     }
                 }
 
                 stage ("Deploy to Production"){
                     steps {
-						bat "copy **\\target\\*.war ${params.tomcat_prod}"
+						bat "copy **//target//*.war ${params.tomcat_prod}"
                     }
                 }
             }
