@@ -18,7 +18,7 @@ stages{
             post {
                 success {
                     echo 'Now Archiving...'
-                    archiveArtifacts artifacts: '**//target//*.war'
+                    archiveArtifacts artifacts: '**\target\*.war'
                 }
             }
         }
@@ -27,13 +27,13 @@ stages{
             parallel{
                 stage ('Deploy to Staging'){
                     steps {
-                        bat "copy **//target//*.war ${params.tomcat_staging}"
+                        bat "copy **\target\*.war C:\Tomcat_8.0\webapps"
                     }
                 }
 
                 stage ("Deploy to Production"){
                     steps {
-						bat "copy **//target//*.war ${params.tomcat_prod}"
+						bat "copy **\target\*.war C:\Tomcat_8.0-Production\webapps"
                     }
                 }
             }
