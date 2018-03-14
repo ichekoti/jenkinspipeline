@@ -2,9 +2,10 @@ pipeline {
     agent any
     
 stages{
-        stage('Init'){
+        stage('Initialize'){
             steps {
-                echo "Testing....."
+                echo "PATH = %PATH%"
+				echo "M2_HOME = %M2_HOME%"
             }
         }
 
@@ -14,10 +15,5 @@ stages{
 			}	
 		}
 		
-		stage('Deploy'){
-			steps {
-				echo "Code Deployed....."
-			}
-		}
 	}
 }
