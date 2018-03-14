@@ -1,16 +1,6 @@
 pipeline {
     agent any
-
-    parameters {
-         string(name: 'tomcat_staging', defaultValue: 'C://Tomcat_8.0/webapps', description: 'Staging Server')
-         string(name: 'tomcat_prod', defaultValue: 'C://Tomcat_8.0-Production//webapps', description: 'Production Server')
-    }
-
-    triggers {
-         pollSCM('* * * * *')
-     }
-
-stages{
+    stages{
         stage('Build'){
             steps {
                 bat 'mvn clean package'
@@ -18,25 +8,35 @@ stages{
             post {
                 success {
                     echo 'Now Archiving...'
-                    archiveArtifacts artifacts: '**\\target\\*.war'
+                    archiveArtifacts artifacts: '**/target/*.war'
+                }
+            }
+        }
+        stage ('Deploy to Staging'){
+            steps {
+                build job: 'Deploy-to-staging'
+            }
+        }
+
+        stage ('Deploy to Production'){
+            steps{
+                timeout(time:5, unit:'DAYS'){
+                    input message:'Approve PRODUCTION Deployment?'
+                }
+
+                build job: 'Deploy-to-Prod'
+            }
+            post {
+                success {
+                    echo 'Code deployed to Production.'
+                }
+
+                failure {
+                    echo ' Deployment failed.'
                 }
             }
         }
 
-        stage ('Deployments'){
-            parallel{
-                stage ('Deploy to Staging'){
-                    steps {
-                        bat "copy C:\\OwnProgramFiles\\Jenkins_Temp\\workspace\\package\\webapp\\target\\*.war C:\\Tomcat_8.0\\webapps"
-                    }
-                }
 
-                stage ("Deploy to Production"){
-                    steps {
-						bat "copy C:\\OwnProgramFiles\\Jenkins_Temp\\workspace\\package\\webapp\\target\\*.war C:\\Tomcat_8.0-Production\\webapps"
-                    }
-                }
-            }
-        }
     }
 }
